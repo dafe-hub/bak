@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSync - AI Memory & Emotion Assistant</title>
+    
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="AI-powered memory enhancement and emotional wellness app">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #50c878;
+            --warning: #f6ad55;
+            --danger: #fc8181;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --gray: #a0aec0;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --dark: #f7fafc;
+            --light: #1a202c;
+            --card-bg: rgba(45, 55, 72, 0.95);
+            --gray: #718096;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== Reset & Base ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== Typography ===== */
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        /* ===== Header & Navigation ===== */
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* ===== Buttons ===== */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            padding: 0;
+            background: var(--light);
+            color: var(--dark);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(15deg);
+        }
+
+        /* ===== Main App Grid ===== */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* ===== Cards ===== */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* ===== Task Manager ===== */
+        .task-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .task-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .task-list {
+            list-style: none;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .task-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .task-item {
+            background: var(--light);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            background: #edf2f7;
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            background: #e6fffa;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+
+        .task-text {
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .task-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .complete-btn {
+            color: var(--success);
+        }
+
+        .complete-btn:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .delete-btn {
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .task-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        /* ===== Memory Palace ===== */
+        .memory-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .memory-preview {
+            flex: 1;
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            min-height: 200px;
+        }
+
+        .memory-object {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 10px;
+            cursor: move;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .memory-object:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .object-label {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.8rem;
+            color: var(--dark);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* ===== Emotion Tracker ===== */
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .emotion-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 12px;
+            background: var(--light);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .emotion-btn:hover {
+            transform: scale(1.05);
+            background: #e2e8f0;
+        }
+
+        .emotion-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .emotion-icon {
+            font-size: 1.5rem;
+        }
+
+        .emotion-label {
+            font-size: 0.8rem;
+        }
+
+        .emotion-log {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .emotion-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        /* ===== AI Insights ===== */
+        .insight-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .insight-content {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .insight-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .insight-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== Animations ===== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-controls {
+                gap: 10px;
+            }
+            
+            .emotion-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .memory-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .task-input-container {
+                flex-direction: column;
+            }
+        }
+
+        /* ===== Utility Classes ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            background: var(--success);
+            color: white;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>MindSync</span>
+            </div>
+            <div class="nav-controls">
+                <button class="btn-icon" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn-icon" id="exportBtn" title="Export Data">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="btn-primary" id="insightBtn">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Insight</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="container">
+        <h1>Your AI Memory & Emotion Assistant</h1>
+        <p>Enhance memory, track emotions, and gain AI-powered insights</p>
+        
+        <!-- App Grid -->
+        <div class="app-grid">
+            <!-- Task Manager Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-tasks card-icon"></i> Task Manager</h2>
+                    <span class="task-count">0 tasks</span>
+                </div>
+                
+                <div class="task-input-container">
+                    <input type="text" class="task-input" id="taskInput" placeholder="What needs to be done?">
+                    <button class="btn-primary" id="addTaskBtn">
+                        <i class="fas fa-plus"></i>
+                        Add
+                    </button>
+                </div>
+                
+                <ul class="task-list" id="taskList">
+                    <!-- Tasks will be added here -->
+                </ul>
+                
+                <div class="task-stats">
+                    <span>Total: <strong id="totalTasks">0</strong></span>
+                    <span>Completed: <strong id="completedTasks">0</strong></span>
+                    <button class="btn-secondary" id="clearCompletedBtn">
+                        Clear Completed
+                    </button>
+                </div>
+            </div>
+
+            <!-- Memory Palace Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-landmark card-icon"></i> Memory Palace</h2>
+                    <button class="btn-icon" id="resetMemoryBtn" title="Reset Memory Palace">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                
+                <p>Drag items to remember them spatially</p>
+                
+                <div class="memory-controls">
+                    <input type="text" class="task-input" id="memoryInput" placeholder="Item to remember">
+                    <button class="btn-secondary" id="addMemoryBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Object
+                    </button>
+                </div>
+                
+                <div class="memory-preview" id="memoryPalace">
+                    <div class="empty-state" id="emptyMemory">
+                        <i class="fas fa-mountain"></i>
+                        <p>Add items to build your memory palace</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotion Tracker Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-heart card-icon"></i> Emotion Tracker</h2>
+                    <span class="current-emotion">😊 Calm</span>
+                </div>
+                
+                <p>How are you feeling right now?</p>
+                
+                <div class="emotion-grid">
+                    <button class="emotion-btn" data-emotion="happy">
+                        <span class="emotion-icon">😊</span>
+                        <span class="emotion-label">Happy</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="sad">
+                        <span class="emotion-icon">😔</span>
+                        <span class="emotion-label">Sad</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="angry">
+                        <span class="emotion-icon">😠</span>
+                        <span class="emotion-label">Angry</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="calm">
+                        <span class="emotion-icon">😌</span>
+                        <span class="emotion-label">Calm</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="excited">
+                        <span class="emotion-icon">🤩</span>
+                        <span class="emotion-label">Excited</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="tired">
+                        <span class="emotion-icon">😴</span>
+                        <span class="emotion-label">Tired</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="anxious">
+                        <span class="emotion-icon">😰</span>
+                        <span class="emotion-label">Anxious</span>
+                    </button>
+                    <button class="emotion-btn" data-emotion="productive">
+                        <span class="emotion-icon">💪</span>
+                        <span class="emotion-label">Productive</span>
+                    </button>
+                </div>
+                
+                <div class="emotion-log" id="emotionLog">
+                    <!-- Emotion entries will appear here -->
+                </div>
+                
+                <button class="btn-secondary" id="viewEmotionHistory">
+                    View History
+                </button>
+            </div>
+
+            <!-- AI Insights Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-robot card-icon"></i> AI Insights</h2>
+                    <button class="btn-icon loading" id="refreshInsightBtn" title="Refresh Insights">
+                        <i class="fas fa-sync"></i>
+                    </button>
+                </div>
+                
+                <p>AI analysis based on your data patterns</p>
+                
+                <div class="insight-card" id="insightContent">
+                    <div class="insight-content">
+                        "Based on your task completion patterns, you're most productive in the morning. Try scheduling important tasks before noon."
+                    </div>
+                    <div class="insight-tags">
+                        <span class="insight-tag">Productivity</span>
+                        <span class="insight-tag">Pattern Analysis</span>
+                        <span class="insight-tag">Suggestion</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3>Memory Strength</h3>
+                    <div style="background: var(--light); height: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="width: 75%; height: 100%; background: linear-gradient(to right, var(--primary), var(--accent)); border-radius: 5px;"></div>
+                    </div>
+                    <p>Your memory retention is good! Review items every 48 hours for optimal recall.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>MindSync v1.0 | AI-Powered Cognitive Enhancement | Data is stored locally in your browser</p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                <i class="fas fa-shield-alt"></i> Your data never leaves your device
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ===== App State =====
+        const appState = {
+            tasks: JSON.parse(localStorage.getItem('mindSync_tasks')) || [],
+            emotions: JSON.parse(localStorage.getItem('mindSync_emotions')) || [],
+            memoryObjects: JSON.parse(localStorage.getItem('mindSync_memory')) || [],
+            isDarkMode: localStorage.getItem('mindSync_darkMode') === 'true',
+            insights: [
+                "You complete more tasks when you take regular breaks. Try the Pomodoro technique!",
+                "Your mood tends to improve after completing tasks. Small wins matter!",
+                "Memory retention improves when you associate items with emotions.",
+                "You're most productive between 9 AM and 12 PM based on your task history.",
+                "Emotional awareness is high - you track your feelings regularly!",
+                "Try grouping similar tasks together to improve efficiency.",
+                "Your memory palace is growing! Review items every 24 hours for best results.",
+                "Based on patterns, you might benefit from a 10-minute meditation session."
+            ]
+        };
+
+        // ===== DOM Elements =====
+        const elements = {
+            // Task Manager
+            taskInput: document.getElementById('taskInput'),
+            addTaskBtn: document.getElementById('addTaskBtn'),
+            taskList: document.getElementById('taskList'),
+            clearCompletedBtn: document.getElementById('clearCompletedBtn'),
+            taskCount: document.querySelector('.task-count'),
+            totalTasks: document.getElementById('totalTasks'),
+            completedTasks: document.getElementById('completedTasks'),
+            
+            // Memory Palace
+            memoryInput: document.getElementById('memoryInput'),
+            addMemoryBtn: document.getElementById('addMemoryBtn'),
+            memoryPalace: document.getElementById('memoryPalace'),
+            resetMemoryBtn: document.getElementById('resetMemoryBtn'),
+            emptyMemory: document.getElementById('emptyMemory'),
+            
+            // Emotion Tracker
+            emotionBtns: document.querySelectorAll('.emotion-btn'),
+            emotionLog: document.getElementById('emotionLog'),
+            currentEmotion: document.querySelector('.current-emotion'),
+            viewEmotionHistory: document.getElementById('viewEmotionHistory'),
+            
+            // AI Insights
+            insightBtn: document.getElementById('insightBtn'),
+            refreshInsightBtn: document.getElementById('refreshInsightBtn'),
+            insightContent: document.getElementById('insightContent'),
+            
+            // Controls
+            themeToggle: document.getElementById('themeToggle'),
+            exportBtn: document.getElementById('exportBtn')
+        };
+
+        // ===== Initialize App =====
+        function initApp() {
+            // Set theme
+            if (appState.isDarkMode) {
+                document.body.classList.add('dark-mode');
+                elements.themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Load data
+            renderTasks();
+            renderEmotions();
+            renderMemoryPalace();
+            updateStats();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Show welcome notification
+            showNotification('MindSync loaded! Your data is stored locally.', 'success');
+        }
+
+        // ===== Event Listeners =====
+        function setupEventListeners() {
+            // Task Manager
+            elements.addTaskBtn.addEventListener('click', addTask);
+            elements.taskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTask();
+            });
+            elements.clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+            
+            // Memory Palace
+            elements.addMemoryBtn.addEventListener('click', addMemoryObject);
+            elements.memoryInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addMemoryObject();
+            });
+            elements.resetMemoryBtn.addEventListener('click', resetMemoryPalace);
+            
+            // Emotion Tracker
+            elements.emotionBtns.forEach(btn => {
+                btn.addEventListener('click', () => logEmotion(btn.dataset.emotion));
+            });
+            elements.viewEmotionHistory.addEventListener('click', showEmotionHistory);
+            
+            // AI Insights
+            elements.insightBtn.addEventListener('click', generateInsight);
+            elements.refreshInsightBtn.addEventListener('click', generateInsight);
+            
+            // Controls
+            elements.themeToggle.addEventListener('click', toggleDarkMode);
+            elements.exportBtn.addEventListener('click', exportData);
+            
+            // Make memory objects draggable
+            setupDragAndDrop();
+        }
+
+        // ===== Task Manager Functions =====
+        function addTask() {
+            const text = elements.taskInput.value.trim();
+            if (!text) return;
+            
+            const task = {
+                id: Date.now(),
+                text,
+                completed: false,
+                createdAt: new Date().toISOString(),
+                priority: 'medium'
+            };
+            
+            appState.tasks.unshift(task);
+            saveData('tasks');
+            renderTasks();
+            updateStats();
+            
+            elements.taskInput.value = '';
+            elements.taskInput.focus();
+            
+            showNotification('Task added successfully!', 'success');
+        }
+
+        function toggleTask(id) {
+            const task = appState.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                task.completedAt = task.completed ? new Date().toISOString() : null;
+                saveData('tasks');
+                renderTasks();
+                updateStats();
+                
+                // Generate insight if multiple tasks completed
+                const completedCount = appState.tasks.filter(t => t.completed).length;
+                if (completedCount % 5 === 0) {
+                    setTimeout(generateInsight, 1000);
+                }
+            }
+        }
+
+        function deleteTask(id) {
+            appState.tasks = appState.tasks.filter(t => t.id !== id);
+            saveData('tasks');
+            renderTasks();
+            updateStats();
+            showNotification('Task deleted', 'warning');
+        }
+
+        function clearCompletedTasks() {
+            const completedCount = appState.tasks.filter(t => t.completed).length;
+            appState.tasks = appState.tasks.filter(t => !t.completed);
+            saveData('tasks');
+            renderTasks();
+            updateStats();
+            showNotification(`Cleared ${completedCount} completed tasks`, 'warning');
+        }
+
+        function renderTasks() {
+            if (appState.tasks.length === 0) {
+                elements.taskList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>No tasks yet. Add one above!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            elements.taskList.innerHTML = appState.tasks.map(task => `
+                <li class="task-item ${task.completed ? 'completed' : ''}">
+                    <span class="task-text">${task.text}</span>
+                    <div class="task-actions">
+                        <button class="task-btn complete-btn" onclick="toggleTask(${task.id})" title="${task.completed ? 'Mark incomplete' : 'Mark complete'}">
+                            <i class="fas fa-${task.completed ? 'undo' : 'check'}"></i>
+                        </button>
+                        <button class="task-btn delete-btn" onclick="deleteTask(${task.id})" title="Delete task">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        // ===== Memory Palace Functions =====
+        function addMemoryObject() {
+            const text = elements.memoryInput.value.trim();
+            if (!text) return;
+            
+            const memoryObj = {
+                id: Date.now(),
+                text,
+                position: {
+                    x: Math.random() * 200,
+                    y: Math.random() * 150
+                },
+                color: getRandomColor(),
+                createdAt: new Date().toISOString()
+            };
+            
+            appState.memoryObjects.push(memoryObj);
+            saveData('memory');
+            renderMemoryPalace();
+            
+            elements.memoryInput.value = '';
+            elements.emptyMemory.classList.add('hidden');
+            
+            showNotification('Memory object added to your palace!', 'success');
+        }
+
+        function renderMemoryPalace() {
+            if (appState.memoryObjects.length === 0) {
+                elements.emptyMemory.classList.remove('hidden');
+                return;
+            }
+            
+            elements.memoryPalace.innerHTML = appState.memoryObjects.map(obj => `
+                <div class="memory-object" 
+                     data-id="${obj.id}"
+                     style="background: ${obj.color}; left: ${obj.position.x}px; top: ${obj.position.y}px;"
+                     draggable="true">
+                    ${obj.text.charAt(0).toUpperCase()}
+                    <div class="object-label">${obj.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function resetMemoryPalace() {
+            if (confirm('Clear your entire memory palace?')) {
+                appState.memoryObjects = [];
+                saveData('memory');
+                renderMemoryPalace();
+                elements.emptyMemory.classList.remove('hidden');
+                showNotification('Memory palace cleared', 'warning');
+            }
+        }
+
+        function setupDragAndDrop() {
+            let draggedElement = null;
+            
+            document.addEventListener('dragstart', (e) => {
+                if (e.target.classList.contains('memory-object')) {
+                    draggedElement = e.target;
+                    setTimeout(() => e.target.style.opacity = '0.5', 0);
+                }
+            });
+            
+            document.addEventListener('dragend', (e) => {
+                if (draggedElement) {
+                    draggedElement.style.opacity = '1';
+                    draggedElement = null;
+                }
+            });
+            
+            elements.memoryPalace.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            
+            elements.memoryPalace.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (!draggedElement) return;
+                
+                const rect = elements.memoryPalace.getBoundingClientRect();
+                const x = e.clientX - rect.left - 30;
+                const y = e.clientY - rect.top - 30;
+                
+                const id = parseInt(draggedElement.dataset.id);
+                const obj = appState.memoryObjects.find(o => o.id === id);
+                
+                if (obj) {
+                    obj.position = { x, y };
+                    draggedElement.style.left = `${x}px`;
+                    draggedElement.style.top = `${y}px`;
+                    saveData('memory');
+                }
+            });
+        }
+
+        // ===== Emotion Tracker Functions =====
+        function logEmotion(emotion) {
+            const emotionData = {
+                id: Date.now(),
+                emotion,
+                intensity: 5,
+                timestamp: new Date().toLocaleString(),
+                notes: ''
+            };
+            
+            appState.emotions.unshift(emotionData);
+            saveData('emotions');
+            renderEmotions();
+            
+            // Update current emotion display
+            const emotionMap = {
+                happy: '😊 Happy',
+                sad: '😔 Sad',
+                angry: '😠 Angry',
+                calm: '😌 Calm',
+                excited: '🤩 Excited',
+                tired: '😴 Tired',
+                anxious: '😰 Anxious',
+                productive: '💪 Productive'
+            };
+            
+            elements.currentEmotion.textContent = emotionMap[emotion] || '😊 Calm';
+            
+            // Remove active class from all buttons
+            elements.emotionBtns.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            event.target.closest('.emotion-btn').classList.add('active');
+            
+            showNotification(`Logged emotion: ${emotion}`, 'success');
+        }
+
+        function renderEmotions() {
+            const recentEmotions = appState.emotions.slice(0, 5);
+            
+            if (recentEmotions.length === 0) {
+                elements.emotionLog.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>No emotions logged yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            elements.emotionLog.innerHTML = recentEmotions.map(emotion => `
+                <div class="emotion-entry">
+                    <span>${getEmoji(emotion.emotion)} ${emotion.emotion}</span>
+                    <span class="emotion-time">${emotion.timestamp}</span>
+                </div>
+            `).join('');
+        }
+
+        function showEmotionHistory() {
+            if (appState.emotions.length === 0) {
+                alert('No emotion history yet.');
+                return;
+            }
+            
+            const emotionCounts = {};
+            appState.emotions.forEach(e => {
+                emotionCounts[e.emotion] = (emotionCounts[e.emotion] || 0) + 1;
+            });
+            
+            const historyText = Object.entries(emotionCounts)
+                .map(([emotion, count]) => `${getEmoji(emotion)} ${emotion}: ${count} times`)
+                .join('\n');
+            
+            alert(`Emotion History:\n\n${historyText}`);
+        }
+
+        // ===== AI Insights Functions =====
+        function generateInsight() {
+            // Show loading animation
+            elements.refreshInsightBtn.classList.add('loading');
+            
+            // Simulate AI processing delay
+            setTimeout(() => {
+                // Analyze user data for insights
+                const completedTasks = appState.tasks.filter(t => t.completed).length;
+                const totalTasks = appState.tasks.length;
+                const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                
+                const emotionVariety = new Set(appState.emotions.map(e => e.emotion)).size;
+                const memoryCount = appState.memoryObjects.length;
+                
+                // Select insight based on data patterns
+                let insight;
+                
+                if (completionRate > 80) {
+                    insight = "Great job on task completion! You're maintaining excellent productivity. Consider tackling more challenging tasks.";
+                } else if (completionRate < 30) {
+                    insight = "You might be taking on too many tasks. Try focusing on 3 most important ones each day.";
+                } else if (emotionVariety < 3 && appState.emotions.length > 5) {
+                    insight = "You're experiencing limited emotional range. Try new activities to stimulate different feelings.";
+                } else if (memoryCount > 10) {
+                    insight = "Your memory palace is growing! Review older items to strengthen neural connections.";
+                } else {
+                    // Random insight from predefined ones
+                    insight = appState.insights[Math.floor(Math.random() * appState.insights.length)];
+                }
+                
+                // Add data context
+                insight += `\n\n📊 Your stats: ${completedTasks}/${totalTasks} tasks completed (${completionRate}%), ${emotionVariety} emotional states tracked, ${memoryCount} memory objects.`;
+                
+                // Update insight display
+                elements.insightContent.innerHTML = `
+                    <div class="insight-content">"${insight}"</div>
+                    <div class="insight-tags">
+                        <span class="insight-tag">AI Analysis</span>
+                        <span class="insight-tag">Personalized</span>
+                        <span class="insight-tag">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                `;
+                
+                // Remove loading animation
+                elements.refreshInsightBtn.classList.remove('loading');
+                
+                showNotification('New AI insight generated!', 'success');
+            }, 1000);
+        }
+
+        // ===== Utility Functions =====
+        function updateStats() {
+            const total = appState.tasks.length;
+            const completed = appState.tasks.filter(t => t.completed).length;
+            
+            elements.taskCount.textContent = `${total} task${total !== 1 ? 's' : ''}`;
+            elements.totalTasks.textContent = total;
+            elements.completedTasks.textContent = completed;
+        }
+
+        function saveData(type) {
+            switch(type) {
+                case 'tasks':
+                    localStorage.setItem('mindSync_tasks', JSON.stringify(appState.tasks));
+                    break;
+                case 'emotions':
+                    localStorage.setItem('mindSync_emotions', JSON.stringify(appState.emotions));
+                    break;
+                case 'memory':
+                    localStorage.setItem('mindSync_memory', JSON.stringify(appState.memoryObjects));
+                    break;
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            appState.isDarkMode = !appState.isDarkMode;
+            localStorage.setItem('mindSync_darkMode', appState.isDarkMode);
+            
+            elements.themeToggle.innerHTML = appState.isDarkMode 
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
+            
+            showNotification(`${appState.isDarkMode ? 'Dark' : 'Light'} mode activated`, 'success');
+        }
+
+        function exportData() {
+            const data = {
+                tasks: appState.tasks,
+                emotions: appState.emotions,
+                memoryObjects: appState.memoryObjects,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mindsync-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: var(--radius);
+                background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--warning)'};
+                color: white;
+                box-shadow: var(--shadow);
+                z-index: 1001;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function getRandomColor() {
+            const colors = [
+                'linear-gradient(135deg, #667eea, #764ba2)',
+                'linear-gradient(135deg, #f093fb, #f5576c)',
+                'linear-gradient(135deg, #4facfe, #00f2fe)',
+                'linear-gradient(135deg, #43e97b, #38f9d7)',
+                'linear-gradient(135deg, #fa709a, #fee140)'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function getEmoji(emotion) {
+            const emojiMap = {
+                happy: '😊',
+                sad: '😔',
+                angry: '😠',
+                calm: '😌',
+                excited: '🤩',
+                tired: '😴',
+                anxious: '😰',
+                productive: '💪'
+            };
+            return emojiMap[emotion] || '😊';
+        }
+
+        // Add fadeOut animation for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(100px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ===== Initialize on Load =====
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Make functions globally available for onclick handlers
+        window.toggleTask = toggleTask;
+        window.deleteTask = deleteTask;
+    </script>
+</body>
+</html>
